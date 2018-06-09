@@ -12,7 +12,7 @@ use WINDOW_WIDTH;
 pub struct Raytracer {
     camera: camera::Camera,
     scene: scene::Scene,
-    pub screen: [Vector3<f32>; WINDOW_WIDTH * WINDOW_HEIGHT],
+    pub screen: Vec<Vector3<f32>>,
 }
 
 impl Raytracer {
@@ -40,7 +40,7 @@ impl Raytracer {
         Raytracer {
             camera: camera::Camera::new(),
             scene: scene,
-            screen: [Vector3::zero(); WINDOW_WIDTH * WINDOW_HEIGHT],
+            screen: vec![Vector3::zero(); WINDOW_WIDTH * WINDOW_HEIGHT],
         }
     }
 
