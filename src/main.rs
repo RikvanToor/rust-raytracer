@@ -9,6 +9,7 @@ mod primitive;
 mod ray;
 mod raytracer;
 mod scene;
+mod traceable;
 
 use cgmath::Vector3;
 use raytracer::Raytracer;

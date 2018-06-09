@@ -53,7 +53,7 @@ impl Primitive for Sphere {
                             normal: n,
                             point: p,
                             distance: t0,
-                            material: self.get_material(),
+                            material: &self.get_material(),
                         })
                     }
                 } else {
@@ -66,7 +66,7 @@ impl Primitive for Sphere {
                             normal: n,
                             point: p,
                             distance: t0,
-                            material: self.get_material(),
+                            material: &self.get_material(),
                         })
                     }
                 }

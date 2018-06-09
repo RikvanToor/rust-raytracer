@@ -6,6 +6,7 @@ use primitive::plane::Plane;
 use primitive::sphere::Sphere;
 use scene;
 use sdl2::EventPump;
+use traceable::*;
 use WINDOW_HEIGHT;
 use WINDOW_WIDTH;
 
@@ -14,6 +15,8 @@ pub struct Raytracer {
     scene: scene::Scene,
     pub screen: [Vector3<f32>; WINDOW_WIDTH * WINDOW_HEIGHT],
 }
+
+const DEPTH: u8 = 4;
 
 impl Raytracer {
     pub fn new() -> Raytracer {
@@ -44,20 +47,44 @@ impl Raytracer {
         }
     }
 
+    fn clear(&mut self) {
+        for i in 0..(WINDOW_WIDTH * WINDOW_HEIGHT) {
+            self.screen[i] = Vector3::zero();
+        }
+    }
+
     pub fn update(&mut self, delta_time: f32, mut event_pump: &mut EventPump) {
         self.camera.update(delta_time, &mut event_pump);
         let rays = self.camera.shoot_rays();
+        let mut traceables: Vec<Traceable> = Vec::new();
         for i in 0..(WINDOW_WIDTH * WINDOW_HEIGHT) {
-            self.screen[i] = {
-                let oi = &self.scene.intersect(&rays[i]);
-                match oi {
-                    Some(intersection) => {
-                        let color = self.scene.shadow_rays(&intersection);
-                        color
+            let _trace = Traceable {
+                ray: &rays[i],
+                output: i,
+                trace_type: TraceType::PrimaryRay,
+                depth: DEPTH,
+            };
+            traceables.push(_trace);
+        }
+        self.clear();
+        self.render(&mut traceables);
+    }
+
+    fn render(&mut self, traceables: &mut Vec<Traceable>) {
+        while traceables.len() > 0 {
+            let x = traceables.pop();
+            match x {
+                Some(traceable) => {
+                    let oi = &self.scene.intersect(traceable.ray);
+                    match oi {
+                        Some(intersection) => {
+                            let color = self.scene.shadow_rays(&intersection);
+                            self.screen[traceable.output] += color;
+                        }
+                        None => {}
                     }
-                    // If the ray intersects nothing, return black.
-                    None => Vector3::zero(),
                 }
+                None => {}
             }
         }
     }
