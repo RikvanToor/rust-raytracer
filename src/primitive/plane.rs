@@ -46,6 +46,5 @@ impl Primitive for Plane {
                 None
             }
         }
-
     }
 }

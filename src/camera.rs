@@ -3,6 +3,7 @@ use cgmath::Vector3;
 use ray::Ray;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
+use sdl2::keyboard::Scancode;
 use sdl2::EventPump;
 use WINDOW_HEIGHT;
 use WINDOW_WIDTH;
@@ -73,60 +74,43 @@ impl Camera {
         let speed = 2.0;
         let mut delta_dir = Vector3::zero();
         let mut delta_pos = Vector3::zero();
+        let keyboard_state = event_pump.keyboard_state();
 
-        for event in event_pump.poll_iter() {
-            match event {
-                Event::KeyDown {
-                    keycode: Some(Keycode::A),
-                    ..
-                } => {
-                    delta_pos -= *right;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::D),
-                    ..
-                } => {
-                    delta_pos += *right;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::W),
-                    ..
-                } => {
-                    delta_pos += self.direction;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::S),
-                    ..
-                } => {
-                    delta_pos -= self.direction;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::Up),
-                    ..
-                } => {
-                    delta_dir += self.up;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::Down),
-                    ..
-                } => {
-                    delta_dir -= self.up;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::Left),
-                    ..
-                } => {
-                    delta_dir -= *right;
-                }
-                Event::KeyDown {
-                    keycode: Some(Keycode::Right),
-                    ..
-                } => {
-                    delta_dir += *right;
-                }
-
-                _ => {}
-            }
+        if keyboard_state.is_scancode_pressed(Scancode::W) {
+            delta_pos += self.direction;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::A) {
+            delta_pos -= *right;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::D) {
+            delta_pos += *right;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::W) {
+            delta_pos += self.direction;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::S) {
+            delta_pos -= self.direction;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::Up) {
+            delta_dir += self.up;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::Down) {
+            delta_dir -= self.up;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::Left) {
+            delta_dir -= *right;
+        } else {
+        }
+        if keyboard_state.is_scancode_pressed(Scancode::Right) {
+            delta_dir += *right;
+        } else {
         }
 
         if delta_pos.magnitude() > 0.0 {

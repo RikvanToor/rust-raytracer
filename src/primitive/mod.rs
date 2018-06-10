@@ -3,8 +3,8 @@ use intersection::Intersection;
 use material::Material;
 use ray::Ray;
 
-pub mod sphere;
 pub mod plane;
+pub mod sphere;
 
 pub trait Primitive {
     fn get_position(&self) -> Vector3<f32>;

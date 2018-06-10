@@ -17,7 +17,7 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::{Color, PixelFormatEnum};
 use sdl2::rect::{Point, Rect};
-use std::time::{SystemTime, Duration};
+use std::time::{Duration, SystemTime};
 
 pub const WINDOW_WIDTH: usize = 512;
 pub const WINDOW_HEIGHT: usize = 512;
@@ -57,8 +57,9 @@ pub fn test() {
 
     'mainloop: loop {
         let cur_time = SystemTime::now();
-        let delta_time = cur_time.duration_since(time).unwrap_or(Duration::new(0,0));
+        let delta_time = cur_time.duration_since(time).unwrap_or(Duration::new(0, 0));
         let delta_time_f32 = delta_time.as_secs() as f32 + delta_time.subsec_nanos() as f32 * 1e-9;
+        //println!("{} seconds since last frame.", delta_time_f32);
         time = cur_time;
         raytracer.update(delta_time_f32, &mut sdl_context.event_pump().unwrap());
         for event in sdl_context.event_pump().unwrap().poll_iter() {
@@ -86,9 +87,7 @@ pub fn test() {
                 }
             })
             .unwrap();
-        canvas.set_draw_color(Color::RGBA(0, 0, 0, 255));
         let dst = Some(Rect::new(0, 0, 512, 512));
-        canvas.clear();
         canvas
             .copy_ex(
                 &texture,
